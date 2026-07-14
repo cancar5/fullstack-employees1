@@ -9,17 +9,20 @@ import {
   createEmployee,
   deleteEmployee,
   updateEmployee,
-} from "#db/query/employees";
+} from "#db/queries/employees";
 
 // TODO: this file!
-app.get("/", (request, response) => {
-  response.send("Welcome to the Fullstack Employees API!");
-});
 
 app.use((request, response, next) => {
   console.log(`${request.method} ${request.path}`);
   next(); // move our middleware
 });
+
+app.get("/", (request, response) => {
+  response.send("Welcome to the Fullstack Employees API.");
+});
+
+app.use(express.json());
 
 app.use("/employees", employeesRouter);
 

@@ -24,6 +24,7 @@ SELECT *
 FROM employees
 `;
   const { rows } = await db.query(sql);
+  console.log("rows", rows);
   return rows;
 }
 
@@ -46,7 +47,7 @@ WHERE id = $1;
  * @returns the updated employee with the given id
  * @returns undefined if employee with the given id does not exist
  */
-export async function updateEmployee(id, { name, birthday, salary }) {
+export async function updateEmployee(id, name, birthday, salary) {
   // TODO
   const sql = `
   UPDATE employees
@@ -57,8 +58,11 @@ export async function updateEmployee(id, { name, birthday, salary }) {
   RETURNING *;
   `;
   const values = [name, birthday, salary, id];
-  const { rows: employees } = await db.query(sql, values);
-  return employees;
+  const {
+    rows: [employee],
+  } = await db.query(sql, values);
+
+  return employee;
 }
 
 /**
@@ -72,6 +76,8 @@ export async function deleteEmployee(id) {
   WHERE id = $1
   RETURNING *;
   `;
-  const { rows } = await db.query(sql, [id]);
-  return rows[0];
+  const {
+    rows: [employee],
+  } = await db.query(sql, [id]);
+  return employee;
 }
